@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:expense_tracker/expense.dart';
 
 class NewExpense extends StatefulWidget {
-  const NewExpense({super.key});
-
+  const NewExpense({super.key, required this.onAddExpense});
+  final void Function(Expense individualObject) onAddExpense;
   @override
   State<NewExpense> createState() {
     return _NewExpenseState();
@@ -40,6 +40,41 @@ class _NewExpenseState extends State<NewExpense> {
     Navigator.pop(context);
   }
 
+  void submmitExpenseData() {
+    final enteredAmount = double.tryParse(amountController.text);
+    final amountIsInvalid = enteredAmount == null ||
+        enteredAmount <=
+            0; // -c  amountIsInvalid: currently (True), data is invalid
+
+    if (textController.text.trim().isEmpty ||
+        selectedDate == null ||
+        amountIsInvalid) {
+      showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+                title: const Text('Invalid Input'),
+                content: const Text(
+                    'Please make sure a valid title, date and category was entered'),
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Okay'))
+                ],
+              ));
+      return;
+    }
+
+    widget.onAddExpense(Expense(
+        title: textController.text,
+        amount: enteredAmount,
+        date: selectedDate!,
+        category: selectedItem));
+
+    Navigator.pop(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -63,7 +98,6 @@ class _NewExpenseState extends State<NewExpense> {
                   decoration: const InputDecoration(
                     prefixText: '\$ ',
                     label: Text('Amount'),
-                    
                   ),
                 ),
               ),
@@ -91,7 +125,10 @@ class _NewExpenseState extends State<NewExpense> {
           Row(
             children: <Widget>[
               DropdownButton(
+                  value:
+                      selectedItem, // Add this line to show the selected item on screen
                   items: Category.values.map((singleCategory) {
+                    //-c  singleCategory : Category.food, Category.leisure .......
                     return DropdownMenuItem(
                       value: singleCategory,
                       child: Text(
@@ -114,11 +151,7 @@ class _NewExpenseState extends State<NewExpense> {
                 width: 8,
               ),
               ElevatedButton(
-                onPressed: () {
-                  // bs ye kam kr rha hai is liyay print krwa rha hu or kuch bhi nhi kr rha hhai abhi ye
-                  print(textController.text);
-                  print(amountController.text);
-                },
+                onPressed: submmitExpenseData,
                 child: const Text('Save Expense'),
               ),
             ],

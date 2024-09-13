@@ -11,9 +11,8 @@ class ExpenseItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 20,
-          vertical: 16,
+        padding: const EdgeInsets.fromLTRB(
+          20,48,20,20,
         ),
         child: Column(children: <Widget>[
           Text(expense.title),

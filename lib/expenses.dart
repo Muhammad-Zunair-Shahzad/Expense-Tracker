@@ -16,25 +16,36 @@ class Expenses extends StatefulWidget {
 
 class _ExpensesState extends State<Expenses> {
   final List<Expense> registeredExpenses = [
-    Expense( // creating object having index 0 using Expense class constructor
-        title: 'Flutter course',
-        amount: 19.99,
-        date: DateTime.now(), // .now is the constructor function of the class DateTime
-        category: Category.work,
-      ),
-    Expense( // creating object having index 1 using Expense class constructor
-        title: 'Cinema',
-        amount: 15.69,
-        date: DateTime.now(), // .now is the constructor function of the class DateTime
-        category: Category.leisure,
-      ),
+    Expense(
+      // creating object having index 0 using Expense class constructor
+      title: 'Flutter course',
+      amount: 19.99,
+      date: DateTime
+          .now(), // .now is the constructor function of the class DateTime
+      category: Category.work,
+    ),
+    Expense(
+      // creating object having index 1 using Expense class constructor
+      title: 'Cinema',
+      amount: 15.69,
+      date: DateTime
+          .now(), // .now is the constructor function of the class DateTime
+      category: Category.leisure,
+    ),
   ];
+
+  void addRegisteredExpenses(Expense individualExpense) {
+    setState(() {
+      registeredExpenses.add(individualExpense);
+    });
+  }
 
   void openAddExpenseOverlay() {
     showModalBottomSheet(
+      isScrollControlled: true,
         context: context,
         builder: (BuildContext context) {
-          return const NewExpense();
+          return NewExpense(onAddExpense: addRegisteredExpenses);
         });
   }
 
