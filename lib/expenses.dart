@@ -40,9 +40,15 @@ class _ExpensesState extends State<Expenses> {
     });
   }
 
+  void removeRegisteredExpense(Expense expense) {
+    setState(() {
+      registeredExpenses.remove(expense); // remove that particular expense form the registered list of expenses
+    });
+  }
+
   void openAddExpenseOverlay() {
     showModalBottomSheet(
-      isScrollControlled: true,
+        isScrollControlled: true,
         context: context,
         builder: (BuildContext context) {
           return NewExpense(onAddExpense: addRegisteredExpenses);
@@ -64,7 +70,7 @@ class _ExpensesState extends State<Expenses> {
       body: Column(
         children: <Widget>[
           const Text('The chart'),
-          Expanded(child: ExpensesList(expenses: registeredExpenses)),
+          Expanded(child: ExpensesList(expenses: registeredExpenses, onRemoveRegisteredExpense: removeRegisteredExpense,)),
         ],
       ),
     );
